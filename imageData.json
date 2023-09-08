@@ -1,0 +1,22 @@
+[
+  {
+    "fieldname": "avatar",
+    "originalname": "15s Sample Reels Video.mp4",
+    "encoding": "7bit",
+    "mimetype": "video/mp4",
+    "destination": "/Users/imac/Documents/express-js-practice-/uploads/images",
+    "filename": "avatar-1694171641519.mp4",
+    "path": "/Users/imac/Documents/express-js-practice-/uploads/images/avatar-1694171641519.mp4",
+    "size": 19524186
+  },
+  {
+    "fieldname": "avatar",
+    "originalname": "5th.png",
+    "encoding": "7bit",
+    "mimetype": "image/png",
+    "destination": "/Users/imac/Documents/express-js-practice-/uploads/images",
+    "filename": "avatar-1694171694090.png",
+    "path": "/Users/imac/Documents/express-js-practice-/uploads/images/avatar-1694171694090.png",
+    "size": 65005
+  }
+]

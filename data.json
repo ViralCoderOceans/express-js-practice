@@ -1,0 +1,38 @@
+[
+  {
+    "userId": "1h9q802re0jjmv59ac9r8",
+    "firstName": "Mannix",
+    "lastName": "Carrillo",
+    "phone": "+1 (585) 222-1035",
+    "createdAt": 1694171663214
+  },
+  {
+    "userId": "1h9q8050l02kle04fs1v",
+    "firstName": "Brynn",
+    "lastName": "Rice",
+    "phone": "+1 (369) 166-6502",
+    "createdAt": 1694171665430
+  },
+  {
+    "userId": "1h9q807820lo0jsjscq0o",
+    "firstName": "Kasper",
+    "lastName": "Dorsey",
+    "phone": "+1 (448) 121-3186",
+    "createdAt": 1694171667714
+  },
+  {
+    "userId": "1h9q809kn0avvj7md9c1o",
+    "firstName": "Chase",
+    "lastName": "Contreras",
+    "phone": "+1 (833) 365-2186",
+    "createdAt": 1694171670167
+  },
+  {
+    "userId": "1h9q80he00svrg926edlo",
+    "firstName": "Elliott",
+    "lastName": "Allison",
+    "phone": "+1 (469) 287-8878",
+    "createdAt": 1694171678144,
+    "updatedAt": 1694171682579
+  }
+]
