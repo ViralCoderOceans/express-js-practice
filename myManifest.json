@@ -1,0 +1,23 @@
+{
+  "endpoints": {
+    "/games": {
+      "get": {
+        "operation": "getAllGames"
+      },
+      "post": {
+        "operation": "addGame"
+      }
+    },
+    "/game/:id": {
+      "get": {
+        "operation": "getGameById"
+      },
+      "put": {
+        "operation": "updateGame"
+      },
+      "delete": {
+        "operation": "deleteGame"
+      }
+    }
+  }
+}

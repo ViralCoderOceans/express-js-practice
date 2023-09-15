@@ -1,0 +1,6 @@
+mutation updateGame($id: ID!, $game: EditGameInput){
+    updateGame(id: $id, game: $game){
+        success
+        message
+    }
+}

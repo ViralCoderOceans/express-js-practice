@@ -3,6 +3,8 @@ var { graphqlHTTP } = require("express-graphql")
 var { buildSchema } = require("graphql")
 const fs = require('fs');
 
+var router = express.Router();
+
 var schema = buildSchema(`#graphql
   type Game {
     id: ID!
@@ -64,8 +66,8 @@ var root = () => {
     games() {
       return db.games
     },
-    game(args) {
-      return db.games.filter((game) => game.id === args.id)[0]
+    game({ id }) {
+      return db.games.filter((game) => game.id === id)[0]
     },
     authors() {
       return db.authors
@@ -105,8 +107,6 @@ var root = () => {
     }
   }
 }
-
-var router = express.Router();
 
 router.use(
   "/",

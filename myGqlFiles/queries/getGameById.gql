@@ -1,0 +1,11 @@
+query getGameById($id: ID!){
+    getGameById(id: $id){
+        success
+        message
+        data{
+            id
+            title
+            platform
+        }
+    }
+}

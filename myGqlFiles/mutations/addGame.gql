@@ -1,0 +1,6 @@
+mutation addGame($game: AddGameInput!){
+    addGame(game: $game){
+        success
+        message
+    }
+}

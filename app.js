@@ -10,6 +10,7 @@ var usersRouter = require('./routes/users');
 var filesRouter = require('./routes/files');
 var mongoDBRouter = require('./routes/mongoDB');
 var graphqlRouter = require('./routes/graphql');
+var restApiRouter = require('./routes/restApi');
 
 var app = express();
 app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
@@ -29,6 +30,7 @@ app.use('/users', usersRouter);
 app.use('/files', filesRouter);
 app.use('/mongoDB', mongoDBRouter);
 app.use('/graphql', graphqlRouter);
+app.use('/restApi', restApiRouter);
 
 // const { MongoClient, ServerApiVersion } = require("mongodb");
 // // Replace the placeholder with your Atlas connection string
