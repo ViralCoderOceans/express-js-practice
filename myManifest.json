@@ -8,7 +8,7 @@
         "operation": "addGame"
       }
     },
-    "/game/:id": {
+    "/games/:id": {
       "get": {
         "operation": "getGameById"
       },

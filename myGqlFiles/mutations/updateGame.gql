@@ -1,5 +1,5 @@
-mutation updateGame($id: ID!, $game: EditGameInput){
-    updateGame(id: $id, game: $game){
+mutation updateGame($game: EditGameInput!){
+    updateGame(game: $game){
         success
         message
     }

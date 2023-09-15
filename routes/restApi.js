@@ -48,13 +48,14 @@ var schema = buildSchema(`#graphql
   type Mutation {
     addGame(game: AddGameInput!): Response
     deleteGame(id: ID!): Response
-    updateGame(id: ID!, game: EditGameInput): Response
+    updateGame(game: EditGameInput!): Response
   }
   input AddGameInput {
     title: String!,
     platform: [String!]!
   }
   input EditGameInput {
+    id: ID!, 
     title: String,
     platform: [String!]
   }
@@ -97,7 +98,7 @@ var resolvers = {
   },
   updateGame(args) {
     db.games = db.games.map((g) => {
-      if (g.id === args.id) {
+      if (g.id === args.game.id) {
         return { ...g, ...args.game }
       }
       return g
