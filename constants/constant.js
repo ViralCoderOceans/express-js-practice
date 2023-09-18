@@ -1,0 +1,17 @@
+const API_CODE = {
+  PUBLIC: 1 << 1,
+  GUEST: 1 << 2,
+  USER: 1 << 3,
+  ADMIN: 1 << 4
+};
+
+const ROLES = {
+  GUEST: API_CODE.PUBLIC + API_CODE.GUEST,
+  USER: API_CODE.PUBLIC + API_CODE.GUEST + API_CODE.USER,
+  ADMIN: API_CODE.PUBLIC + API_CODE.GUEST + API_CODE.USER + API_CODE.ADMIN
+};
+
+module.exports = {
+  ROLES,
+  API_CODE
+};

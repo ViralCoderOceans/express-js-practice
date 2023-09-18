@@ -4,6 +4,20 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
+var jwt = require('jsonwebtoken');
+const fs = require('fs');
+
+const checkAuthentication = (req, res, next) => {
+  var privateKey = fs.readFileSync('private.key');
+  const accessToken = req.headers.authorization?.split(' ')[1];
+  jwt.verify(accessToken, privateKey, { algorithms: ['RS256'] }, function (err, payload) {
+    if (payload) {
+      req.payload = payload
+      return next()
+    }
+    res.redirect('/unAuthenticated');
+  });
+}
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -11,6 +25,12 @@ var filesRouter = require('./routes/files');
 var mongoDBRouter = require('./routes/mongoDB');
 var graphqlRouter = require('./routes/graphql');
 var restApiRouter = require('./routes/restApi');
+var loginRouter = require('./routes/login');
+var guestRouter = require('./routes/guest');
+var userRouter = require('./routes/user');
+var adminRouter = require('./routes/admin');
+var unAuthenticatedRouter = require('./routes/unAuthenticated');
+var unAuthorizedRouter = require('./routes/unAuthorized');
 
 var app = express();
 app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
@@ -26,11 +46,29 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+
+//normal users crud operations
 app.use('/users', usersRouter);
+
+//file upload-download system
 app.use('/files', filesRouter);
+
+//connect mongodb to express
 app.use('/mongoDB', mongoDBRouter);
+
+//make crud operations using graphql
 app.use('/graphql', graphqlRouter);
+
+//make rest-api on the top og graphql
 app.use('/restApi', restApiRouter);
+
+//Authenticated and Authorized login system
+app.use('/login', loginRouter);
+app.use('/guest', checkAuthentication, guestRouter);
+app.use('/user', checkAuthentication, userRouter);
+app.use('/admin', checkAuthentication, adminRouter);
+app.use('/unAuthenticated', unAuthenticatedRouter);
+app.use('/unAuthorized', unAuthorizedRouter);
 
 // const { MongoClient, ServerApiVersion } = require("mongodb");
 // // Replace the placeholder with your Atlas connection string
@@ -58,18 +96,14 @@ app.use('/restApi', restApiRouter);
 // }
 // run().catch(console.dir);
 
-// catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
 });
 
-// error handler
 app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
   res.status(err.status || 500);
   res.render('error');
 });

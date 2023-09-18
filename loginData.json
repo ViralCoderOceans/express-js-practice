@@ -1,0 +1,17 @@
+[
+  {
+    "username": "guest",
+    "password": "guest",
+    "userType": 6
+  },
+  {
+    "username": "user",
+    "password": "user",
+    "userType": 14
+  },
+  {
+    "username": "admin",
+    "password": "admin",
+    "userType": 30
+  }
+]
