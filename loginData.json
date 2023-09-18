@@ -2,16 +2,16 @@
   {
     "username": "guest",
     "password": "guest",
-    "userType": 6
+    "hasRole": "guest"
   },
   {
     "username": "user",
     "password": "user",
-    "userType": 14
+    "hasRole": "user"
   },
   {
     "username": "admin",
     "password": "admin",
-    "userType": 30
+    "hasRole": "admin"
   }
 ]

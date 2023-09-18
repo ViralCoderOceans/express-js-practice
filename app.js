@@ -6,16 +6,16 @@ var logger = require('morgan');
 var cors = require('cors');
 var jwt = require('jsonwebtoken');
 const fs = require('fs');
+const { ROLES } = require('./constants/constant');
 
 const checkAuthentication = (req, res, next) => {
   var privateKey = fs.readFileSync('private.key');
   const accessToken = req.headers.authorization?.split(' ')[1];
   jwt.verify(accessToken, privateKey, { algorithms: ['RS256'] }, function (err, payload) {
-    if (payload) {
-      req.payload = payload
+    if (ROLES[payload.hasRole].includes(req.originalUrl.split('/')[1])) {
       return next()
     }
-    res.redirect('/unAuthenticated');
+    res.redirect('/unAuthorized');
   });
 }
 
@@ -29,7 +29,6 @@ var loginRouter = require('./routes/login');
 var guestRouter = require('./routes/guest');
 var userRouter = require('./routes/user');
 var adminRouter = require('./routes/admin');
-var unAuthenticatedRouter = require('./routes/unAuthenticated');
 var unAuthorizedRouter = require('./routes/unAuthorized');
 
 var app = express();
@@ -67,7 +66,6 @@ app.use('/login', loginRouter);
 app.use('/guest', checkAuthentication, guestRouter);
 app.use('/user', checkAuthentication, userRouter);
 app.use('/admin', checkAuthentication, adminRouter);
-app.use('/unAuthenticated', unAuthenticatedRouter);
 app.use('/unAuthorized', unAuthorizedRouter);
 
 // const { MongoClient, ServerApiVersion } = require("mongodb");
