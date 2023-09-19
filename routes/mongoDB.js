@@ -22,60 +22,80 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/:id', async (req, res) => {
+  try {
+    const client = await MongoClient.connect(url);
+    const db = client.db(dbName);
+
+    const collection = db.collection('users');
+
+    const result = await collection.findOne(
+      { _id: new ObjectId(req.params.id) }
+    );
+
+    res.send(result);
+
+    client.close();
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
 router.post('/', async (req, res) => {
   try {
-      const client = await MongoClient.connect(url);
-      const db = client.db(dbName);
-  
-      const collection = db.collection('users');
-  
-      const result = await collection.insertOne(req.body);
-  
-      res.send(result.ops[0]);
-  
-      client.close();
+    const client = await MongoClient.connect(url);
+    const db = client.db(dbName);
+
+    const collection = db.collection('users');
+
+    const result = await collection.insertOne(req.body);
+
+    res.send(result);
+
+    client.close();
   } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: 'Internal Server Error' });
+    console.error(err);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 
 router.put('/:id', async (req, res) => {
   try {
-      const client = await MongoClient.connect(url);
-      const db = client.db(dbName);
-  
-      const collection = db.collection('users');
-  
-      const result = await collection.updateOne(
-          { _id: ObjectId(req.params.id) },
-          { $set: req.body }
-      );
-  
-      res.send(result);
-  
-      client.close();
+    const client = await MongoClient.connect(url);
+    const db = client.db(dbName);
+
+    const collection = db.collection('users');
+
+    const result = await collection.updateOne(
+      { _id: new ObjectId(req.params.id) },
+      { $set: req.body }
+    );
+
+    res.send(result);
+
+    client.close();
   } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: 'Internal Server Error' });
+    console.error(err);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 
 router.delete('/:id', async (req, res) => {
   try {
-      const client = await MongoClient.connect(url);
-      const db = client.db(dbName);
-  
-      const collection = db.collection('users');
-  
-      const result = await collection.deleteOne({ _id: new ObjectId(req.params.id) });
-  
-      res.json(result);
-  
-      client.close();
+    const client = await MongoClient.connect(url);
+    const db = client.db(dbName);
+
+    const collection = db.collection('users');
+
+    const result = await collection.deleteOne({ _id: new ObjectId(req.params.id) });
+
+    res.json(result);
+
+    client.close();
   } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: 'Internal Server Error' });
+    console.error(err);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 
