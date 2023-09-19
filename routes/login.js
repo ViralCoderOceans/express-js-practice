@@ -3,13 +3,14 @@ var cookieParser = require('cookie-parser');
 const fs = require('fs');
 var jwt = require('jsonwebtoken');
 var router = express.Router();
+
 router.use(cookieParser());
 
 var db = JSON.parse(fs.readFileSync("loginData.json", "utf8"));
 var privateKey = fs.readFileSync('private.key');
 
 const loginCheckMiddleware = (req, res, next) => {
-  var result = db.find((elm) => ((elm.username === req.body.username) && (elm.password === req.body.password)))
+  var result = db.find((elm) => ((elm.username === req.query.username) && (elm.password === req.query.password)))
   if (result) {
     var { password, ...data } = result
     var token = jwt.sign(data, privateKey, { algorithm: 'RS256' });
@@ -29,7 +30,8 @@ router.get('/', loginCheckMiddleware, (req, res, next) => {
   res.status(200).send({
     success: true,
     data: {
-      message: 'Login successfully.'
+      message: 'Login successfully.',
+      accessToken: req.accessToken
     }
   })
 });

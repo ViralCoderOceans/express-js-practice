@@ -1,7 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
 var jwt = require('jsonwebtoken');
@@ -12,10 +11,15 @@ const checkAuthentication = (req, res, next) => {
   var privateKey = fs.readFileSync('private.key');
   const accessToken = req.headers.authorization?.split(' ')[1];
   jwt.verify(accessToken, privateKey, { algorithms: ['RS256'] }, function (err, payload) {
-    if (ROLES[payload.hasRole].includes(req.originalUrl.split('/')[1])) {
-      return next()
+    if (payload) {
+      if (ROLES[payload.hasRole].includes(req.originalUrl.split('/')[1])) {
+        req.payload = payload
+        return next()
+      }
+      res.redirect('/unAuthorized');
+    } else if (err) {
+      res.redirect('/unAuthorized');
     }
-    res.redirect('/unAuthorized');
   });
 }
 
@@ -26,6 +30,7 @@ var mongoDBRouter = require('./routes/mongoDB');
 var graphqlRouter = require('./routes/graphql');
 var restApiRouter = require('./routes/restApi');
 var loginRouter = require('./routes/login');
+var dataTableRouter = require('./routes/dataTable');
 var guestRouter = require('./routes/guest');
 var userRouter = require('./routes/user');
 var adminRouter = require('./routes/admin');
@@ -41,7 +46,6 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
@@ -63,6 +67,7 @@ app.use('/restApi', restApiRouter);
 
 //Authenticated and Authorized login system
 app.use('/login', loginRouter);
+app.use('/data-table', dataTableRouter);
 app.use('/guest', checkAuthentication, guestRouter);
 app.use('/user', checkAuthentication, userRouter);
 app.use('/admin', checkAuthentication, adminRouter);

@@ -1,27 +1,35 @@
 var express = require('express');
 const formidable = require('express-formidable');
-var router = express.Router();
+var jwt = require('jsonwebtoken');
 const fs = require('fs');
+var router = express.Router();
 
 router.use(formidable());
 
-const getData = (req, res, next) => {
-  const accessToken = req.headers.authorization?.split(' ')[1];
-
-  if (accessToken === 'helloWorld') {
-    fs.readFile('data.json', 'utf8', function (err, data) {
-      if (err) {
-        console.log("Something went wrong, while fetching data")
+const authCheckMiddleware = (accessedRoles) => {
+  return (req, res, next) => {
+    var privateKey = fs.readFileSync('private.key');
+    const accessToken = req.headers.authorization?.split(' ')[1];
+    jwt.verify(accessToken, privateKey, { algorithms: ['RS256'] }, function (err, payload) {
+      if (payload) {
+        if (accessedRoles.includes(payload.hasRole)) {
+          fs.readFile('data.json', 'utf8', function (err, data) {
+            if (err) {
+              console.log("Something went wrong, while fetching data")
+            }
+            req.payload = payload
+            req.usersData = JSON.parse(data);
+            return next()
+          });
+        } else {
+          res.redirect('/unAuthorized');
+        }
+      } else if (err) {
+        res.redirect('/unAuthorized');
       }
-      req.usersData = JSON.parse(data);
-      next()
     });
-  } else {
-    res.status(401).json({ error: 'Unauthorized' });
-  }
+  };
 }
-
-router.use(getData);
 
 const writeFile = (data) => {
   fs.writeFile("data.json", data, 'utf8', function (err) {
@@ -32,7 +40,14 @@ const writeFile = (data) => {
   });
 }
 
-router.get('/', getData, (req, res, next) => {
+router.get('/userType', authCheckMiddleware(["guest", "user", "admin"]), (req, res, next) => {
+  res.status(200).send({
+    success: true,
+    data: req.payload
+  })
+});
+
+router.get('/', authCheckMiddleware(["guest", "user", "admin"]), (req, res, next) => {
   res.status(200).send({
     success: true,
     data: {
@@ -42,7 +57,7 @@ router.get('/', getData, (req, res, next) => {
   })
 });
 
-router.get('/:id', getData, (req, res, next) => {
+router.get('/:id', authCheckMiddleware(["guest", "user", "admin"]), (req, res, next) => {
   const isAvailable = req.usersData.filter((elm) => elm.userId === req.params.id)
   if (isAvailable.length) {
     res.status(200).send({
@@ -62,7 +77,7 @@ router.get('/:id', getData, (req, res, next) => {
   }
 });
 
-router.post('/', (req, res) => {
+router.post('/', authCheckMiddleware(["user", "admin"]), (req, res, next) => {
   const uid = () =>
     String(
       Date.now().toString(32) +
@@ -84,9 +99,9 @@ router.post('/', (req, res) => {
       data: req.usersData
     }
   })
-})
+});
 
-router.put('/:id', (req, res) => {
+router.put('/:id', authCheckMiddleware(["admin"]), (req, res, next) => {
   const isAvailable = req.usersData.filter((elm) => elm.userId === req.params.id)
   if (isAvailable.length) {
     const newData = req.usersData.map((elm) => {
@@ -118,9 +133,9 @@ router.put('/:id', (req, res) => {
       }
     })
   }
-})
+});
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', authCheckMiddleware(["admin"]), (req, res, next) => {
   const isAvailable = req.usersData.filter((elm) => elm.userId === req.params.id)
   if (isAvailable.length) {
     const deletedData = req.usersData.filter((elm) => elm.userId !== req.params.id)
@@ -140,6 +155,6 @@ router.delete('/:id', (req, res) => {
       }
     })
   }
-})
+});
 
 module.exports = router;

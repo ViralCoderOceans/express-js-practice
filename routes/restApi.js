@@ -5,7 +5,6 @@ const { buildSchema, execute } = require('graphql');
 const path = require('path');
 const bodyParser = require('body-parser');
 
-
 var router = express.Router();
 
 router.use(bodyParser.json());
