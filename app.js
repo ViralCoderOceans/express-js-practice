@@ -6,6 +6,10 @@ var cors = require('cors');
 var jwt = require('jsonwebtoken');
 const fs = require('fs');
 const { ROLES } = require('./constants/constant');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+var passport = require('passport');
+var logger = require('morgan');
 
 const checkAuthentication = (req, res, next) => {
   var privateKey = fs.readFileSync('private.key');
@@ -35,18 +39,47 @@ var guestRouter = require('./routes/guest');
 var userRouter = require('./routes/user');
 var adminRouter = require('./routes/admin');
 var unAuthorizedRouter = require('./routes/unAuthorized');
+var passportLoginRouter = require('./routes/passportLogin');
+var googleLoginRouter = require('./routes/googleLogin');
 
 var app = express();
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+// app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+app.use((req, res, next) => {
+  const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001'];
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.header('Access-Control-Allow-Credentials', true);
+  return next();
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+app.locals.pluralize = require('pluralize');
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret: 'my-secret-key',
+  resave: false,
+  saveUninitialized: false,
+}));
+app.use(passport.authenticate('session'));
+app.use(function (req, res, next) {
+  var msgs = req.session.messages || [];
+  res.locals.messages = msgs;
+  res.locals.hasMessages = !!msgs.length;
+  req.session.messages = [];
+  next();
+});
 
 app.use('/', indexRouter);
 
@@ -72,6 +105,18 @@ app.use('/guest', checkAuthentication, guestRouter);
 app.use('/user', checkAuthentication, userRouter);
 app.use('/admin', checkAuthentication, adminRouter);
 app.use('/unAuthorized', unAuthorizedRouter);
+
+// /oauth2/redirect/google
+app.get('/oauth2/redirect/google', passport.authenticate('google'), (req, res, next) => {
+  var db = JSON.parse(fs.readFileSync('passportDB.json'));
+  res.redirect(`http://localhost:3000/googleLogin/${db.CurrentGoogleUsers.id}`);
+});
+
+//passport-login
+app.use('/passportLogin', passportLoginRouter);
+
+//passport-google-login
+app.use('/googleLogin', googleLoginRouter);
 
 // const { MongoClient, ServerApiVersion } = require("mongodb");
 // // Replace the placeholder with your Atlas connection string
