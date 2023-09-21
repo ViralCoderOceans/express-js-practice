@@ -54,7 +54,7 @@ router.get('/userData/:id', (req, res, next) => {
     });
   } else {
     res.status(400).send({
-      success: true,
+      success: false,
       data: {
         message: 'User not founded.'
       }

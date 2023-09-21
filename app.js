@@ -41,6 +41,7 @@ var adminRouter = require('./routes/admin');
 var unAuthorizedRouter = require('./routes/unAuthorized');
 var passportLoginRouter = require('./routes/passportLogin');
 var googleLoginRouter = require('./routes/googleLogin');
+var githubLoginRouter = require('./routes/githubLogin');
 
 var app = express();
 // app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
@@ -112,11 +113,20 @@ app.get('/oauth2/redirect/google', passport.authenticate('google'), (req, res, n
   res.redirect(`http://localhost:3000/googleLogin/${db.CurrentGoogleUsers.id}`);
 });
 
+// /auth/github/callback
+app.get('/auth/github/callback', passport.authenticate('github'), (req, res) => {
+  var db = JSON.parse(fs.readFileSync('passportDB.json'));
+  res.redirect(`http://localhost:3000/githubLogin/${db.CurrentGithubUsers.id}`);
+});
+
 //passport-login
 app.use('/passportLogin', passportLoginRouter);
 
 //passport-google-login
 app.use('/googleLogin', googleLoginRouter);
+
+//passport-github-login
+app.use('/githubLogin', githubLoginRouter);
 
 // const { MongoClient, ServerApiVersion } = require("mongodb");
 // // Replace the placeholder with your Atlas connection string
