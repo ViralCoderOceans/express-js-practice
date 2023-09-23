@@ -1,1 +1,31 @@
-{"users":[{"id":1695211045387,"username":"user","password":"user"}],"googleUsers":[{"id":"112594136465105780124","name":"Viral CoderOceans","email":"viral.coderoceans@gmail.com"}],"CurrentGoogleUsers":{},"githubUsers":[{"id":"132561899","name":"Viral Nakrani","username":"ViralCoderOceans","email":"viral.coderoceans@gmail.com","profileUrl":"https://github.com/ViralCoderOceans"}],"CurrentGithubUsers":{"id":"132561899","name":"Viral Nakrani","username":"ViralCoderOceans","email":"viral.coderoceans@gmail.com","profileUrl":"https://github.com/ViralCoderOceans"}}
+{
+  "users": [
+    {
+      "id": 1695211045387,
+      "username": "user",
+      "password": "user"
+    }
+  ],
+  "googleUsers": [
+    {
+      "id": "112594136465105780124",
+      "name": "Viral CoderOceans",
+      "email": "viral.coderoceans@gmail.com"
+    }
+  ],
+  "CurrentGoogleUsers": {
+    "id": "112594136465105780124",
+    "name": "Viral CoderOceans",
+    "email": "viral.coderoceans@gmail.com"
+  },
+  "githubUsers": [
+    {
+      "id": "132561899",
+      "name": "Viral Nakrani",
+      "username": "ViralCoderOceans",
+      "email": "viral.coderoceans@gmail.com",
+      "profileUrl": "https://github.com/ViralCoderOceans"
+    }
+  ],
+  "CurrentGithubUsers": {}
+}

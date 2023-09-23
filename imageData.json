@@ -28,5 +28,15 @@
     "filename": "avatar-1694605190866.mp4",
     "path": "/Users/imac/Documents/express-js-practice-/uploads/images/avatar-1694605190866.mp4",
     "size": 5747809
+  },
+  {
+    "fieldname": "avatar",
+    "originalname": "avatar-1694005555572.png",
+    "encoding": "7bit",
+    "mimetype": "image/png",
+    "destination": "/Users/imac/Documents/express-js-practice/uploads/images",
+    "filename": "avatar-1695375553497.png",
+    "path": "/Users/imac/Documents/express-js-practice/uploads/images/avatar-1695375553497.png",
+    "size": 2946390
   }
 ]

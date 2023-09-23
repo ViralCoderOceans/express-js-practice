@@ -42,20 +42,21 @@ var unAuthorizedRouter = require('./routes/unAuthorized');
 var passportLoginRouter = require('./routes/passportLogin');
 var googleLoginRouter = require('./routes/googleLogin');
 var githubLoginRouter = require('./routes/githubLogin');
+var oauth2LoginRouter = require('./routes/oauth2Login');
 
 var app = express();
-// app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
-app.use((req, res, next) => {
-  const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001'];
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  }
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.header('Access-Control-Allow-Credentials', true);
-  return next();
-});
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+// app.use((req, res, next) => {
+//   const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001'];
+//   const origin = req.headers.origin;
+//   if (allowedOrigins.includes(origin)) {
+//     res.setHeader('Access-Control-Allow-Origin', origin);
+//   }
+//   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+//   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+//   res.header('Access-Control-Allow-Credentials', true);
+//   return next();
+// });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -127,6 +128,9 @@ app.use('/googleLogin', googleLoginRouter);
 
 //passport-github-login
 app.use('/githubLogin', githubLoginRouter);
+
+//oauth2-login(example-google/github-login)
+app.use('/oauth2Login', oauth2LoginRouter);
 
 // const { MongoClient, ServerApiVersion } = require("mongodb");
 // // Replace the placeholder with your Atlas connection string

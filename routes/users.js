@@ -6,19 +6,13 @@ const fs = require('fs');
 router.use(formidable());
 
 const getData = (req, res, next) => {
-  const accessToken = req.headers.authorization?.split(' ')[1];
-
-  if (accessToken === 'helloWorld') {
-    fs.readFile('data.json', 'utf8', function (err, data) {
-      if (err) {
-        console.log("Something went wrong, while fetching data")
-      }
-      req.usersData = JSON.parse(data);
-      next()
-    });
-  } else {
-    res.status(401).json({ error: 'Unauthorized' });
-  }
+  fs.readFile('data.json', 'utf8', function (err, data) {
+    if (err) {
+      console.log("Something went wrong, while fetching data")
+    }
+    req.usersData = JSON.parse(data);
+    next()
+  });
 }
 
 router.use(getData);
