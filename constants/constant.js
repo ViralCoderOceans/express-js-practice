@@ -5,6 +5,8 @@ const GOOGLE_CLIENT_SECRET = "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"
 const PLUGIN_NAME = "this-is-my-plugin"
 const GITHUB_CLIENT_ID = "b876585fa2ba0e66b997"
 const GITHUB_CLIENT_SECRET = "6c19905d46b7e2c680cf9bbb6af8210d66b1ef63"
+const MONGO_URL = "mongodb+srv://viralnakrani:viralnakrani@thevknakrani.dvqlomp.mongodb.net/"
+const MONGO_DB_NAME = "users"
 
 module.exports = {
   ROLES,
@@ -12,5 +14,7 @@ module.exports = {
   GOOGLE_CLIENT_SECRET,
   PLUGIN_NAME,
   GITHUB_CLIENT_ID,
-  GITHUB_CLIENT_SECRET
+  GITHUB_CLIENT_SECRET,
+  MONGO_URL,
+  MONGO_DB_NAME
 };

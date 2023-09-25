@@ -43,6 +43,7 @@ var passportLoginRouter = require('./routes/passportLogin');
 var googleLoginRouter = require('./routes/googleLogin');
 var githubLoginRouter = require('./routes/githubLogin');
 var oauth2LoginRouter = require('./routes/oauth2Login');
+var universityRouter = require('./routes/university');
 
 var app = express();
 app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
@@ -99,6 +100,9 @@ app.use('/graphql', graphqlRouter);
 
 //make rest-api on the top og graphql
 app.use('/restApi', restApiRouter);
+
+//university-list
+app.use('/university', universityRouter);
 
 //Authenticated and Authorized login system
 app.use('/login', loginRouter);
